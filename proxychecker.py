@@ -14,8 +14,10 @@ def check(proxy):
         response = requests.get(url, proxies={"http": "http://" + str(proxy), "https": "http://" + str(proxy)}, timeout=3)
         if response.status_code == 200:
             print(f"Proxy {proxy} is working!")
-            with open(good, "a") as f:
-                f.write(proxy + "\n")
+            with open(good, "r+") as f:
+                contents = f.read()
+                if proxy+'\n' not in contents:
+                    f.write(proxy + "\n")
     except (requests.exceptions.ProxyError, requests.exceptions.Timeout, requests.exceptions.ConnectTimeout):
         print(f"Proxy {proxy} is NOT working X")
 
