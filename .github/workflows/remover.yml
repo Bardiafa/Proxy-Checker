@@ -2,6 +2,9 @@ name: Remover
 permissions: write-all
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: '*/2 * * * *'
 
