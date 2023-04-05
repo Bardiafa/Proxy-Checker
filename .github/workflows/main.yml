@@ -1,4 +1,5 @@
 name: Proxy Checker
+permissions: write-all
 
 on:
   push:
