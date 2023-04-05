@@ -10,4 +10,4 @@ def empty_good():
 
 while True:
     empty_good()
-    time.sleep(900) # set custom time to remove all proxy (in sec)
+    time.sleep(1) # set custom time to remove all proxy (in sec)
