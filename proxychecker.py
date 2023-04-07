@@ -9,6 +9,9 @@ pt = os.path.dirname(__file__)
 good = os.path.join(pt, "good.txt")
 ir = os.path.join(pt, "IR.txt")
 
+open(good, "w").close()
+open(ir, "w").close()
+
 def check(proxy):
     print(f"Checking proxy {proxy}...")
     try:
