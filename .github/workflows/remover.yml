@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
       - name: Run script
-        run: python duplicate-remover.py
+        run: python remover.py
       - name: Commit and push files
         uses: EndBug/add-and-commit@v7
         with:
