@@ -6,7 +6,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '*/59 * * * *'
+    - cron: '*/112 * * * *'
 
 jobs:
   run-python:
