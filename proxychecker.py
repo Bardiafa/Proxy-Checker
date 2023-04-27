@@ -1,40 +1,43 @@
 import concurrent.futures
 import requests
 import os
+import time
 
-url = "https://www.aparat.com/"
-proxysorce = "https://raw.githubusercontent.com/Bardiafa/Proxy-Leecher/main/proxies.txt"
+url = "https://www.aparat.com/v/SGc8T"
+proxysource = "https://raw.githubusercontent.com/Bardiafa/Proxy-Leecher/main/proxies.txt"
 
 pt = os.path.dirname(__file__)
 good = os.path.join(pt, "good.txt")
-ir = os.path.join(pt, "IR.txt")
+prxcnt = os.path.join(pt, "prxcnt.txt")
 
-open(good, "w").close()
-open(ir, "w").close()
+session = requests.Session()
+session.headers.update({"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36'})
 
-def check(proxy):
-    print(f"Checking proxy {proxy}...")
+def check(proxy, idx, total):
+    open(prxcnt, "w").write(f"[{idx}/{total}]")
     try:
-        response = requests.get(url, proxies={"http": "http://" + str(proxy), "https": "http://" + str(proxy)}, timeout=10)
+        response = session.get(url, proxies={"http": "http://" + str(proxy), "https": "http://" + str(proxy)}, timeout=10)
         if response.status_code == 200:
-            print(f"Proxy {proxy} is working!")
-            try:
-                cu = requests.get(f"https://ipapi.co/{proxy}/json/", timeout=10).json()
-                if cu["country"] == "IR":
-                    with open(ir, "a") as f:
-                        f.write(proxy + "\n")        
-                else:
-                    with open(good, "a") as f:
-                        f.write(proxy + "\n")
-            except:
-                with open(good, "a") as f:
-                    f.write(proxy + "\n")            
+            print(f"[+ {idx}/{total}] Proxy {proxy} is working!")
+            with open(good, "a") as f:
+                f.write(proxy + "\n")
+                
     except (requests.exceptions.ProxyError, requests.exceptions.Timeout, requests.exceptions.ConnectTimeout):
-        print(f"Proxy {proxy} is NOT working X")
+        print(f"[- {idx}/{total}] Proxy {proxy} is NOT working!")
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-    proxylist = requests.get(proxysorce).text.splitlines()
-    proxy_chunks = [proxylist[i:i+50] for i in range(0, len(proxylist), 50)]
-    for chunk in proxy_chunks:
-        executor.map(check, chunk)
+def main():
+    proxylist = requests.get(proxysource).text.splitlines()
+    print(f"Total number of proxies found: {len(proxylist)}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=200) as executor:
+        for idx, proxy in enumerate(proxylist, start=1):
+            executor.submit(check, proxy, idx, len(proxylist))
+
+    print("Done!")  
+    open(prxcnt, "w").close()
+    time.sleep(5)
+    main()    
+    
+
+if __name__ == "__main__":
+    main()
 
