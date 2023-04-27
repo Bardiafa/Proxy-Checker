@@ -8,13 +8,11 @@ proxysource = "https://raw.githubusercontent.com/Bardiafa/Proxy-Leecher/main/pro
 
 pt = os.path.dirname(__file__)
 good = os.path.join(pt, "good.txt")
-prxcnt = os.path.join(pt, "prxcnt.txt")
 
 session = requests.Session()
 session.headers.update({"User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36'})
 
 def check(proxy, idx, total):
-    open(prxcnt, "w").write(f"[{idx}/{total}]")
     try:
         response = session.get(url, proxies={"http": "http://" + str(proxy), "https": "http://" + str(proxy)}, timeout=10)
         if response.status_code == 200:
@@ -33,10 +31,6 @@ def main():
             executor.submit(check, proxy, idx, len(proxylist))
 
     print("Done!")  
-    open(prxcnt, "w").close()
-    time.sleep(5)
-    main()    
-    
 
 if __name__ == "__main__":
     main()
