@@ -3,7 +3,7 @@ import requests
 import os
 import time
 
-url = "https://www.aparat.com/v/SGc8T"
+url = "https://www.google.com/"
 proxysource = "https://raw.githubusercontent.com/Bardiafa/Proxy-Leecher/main/proxies.txt"
 
 pt = os.path.dirname(__file__)
